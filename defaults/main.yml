@@ -1,0 +1,13 @@
+---
+# defaults file for ansible-newrelic-php
+
+newrelic_php_packages:
+  - newrelic-php5
+  - gpg-agent
+
+newrelic_php_additional_packages: []
+
+newrelic_php_license_key: ''
+newrelic_php_app_name: 'php-application'
+
+newrelic_php_packages_config_files: []

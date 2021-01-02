@@ -1,0 +1,4 @@
+---
+package:
+  newrelic-php5:
+    installed: true

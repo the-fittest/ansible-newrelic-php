@@ -1,0 +1,58 @@
+---
+# tasks file for ansible-newrelic-php
+
+- name: Install newrelic php requirements
+  package:
+    name: gpg-agent
+    state: present
+  tags:
+    - package
+    - newrelic
+    - newrelic-php
+
+- name: Add New Relic apt-key
+  apt_key:
+    url: https://download.newrelic.com/548C16BF.gpg
+    state: present
+  tags:
+    - package
+    - newrelic
+    - newrelic-php
+
+- name: Add New Relic apt repository
+  apt_repository:
+    repo: "deb http://apt.newrelic.com/debian/ newrelic non-free"
+    state: present
+    update_cache: yes
+    mode: "0644"
+  tags:
+    - package
+    - newrelic
+    - newrelic-php
+
+- name: Install newrelic php
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "{{ newrelic_php_packages }}"
+    - "{{ newrelic_php_additional_packages }}"
+  tags:
+    - package
+    - newrelic
+    - newrelic-php
+
+- name: Configure PHP-FPM
+  when: newrelic_php_packages_config_files | length > 0
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: "0644"
+  with_items:
+    - "{{ newrelic_php_packages_config_files }}"
+  tags:
+    - config
+    - newrelic
+    - newrelic-php

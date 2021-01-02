@@ -1,0 +1,35 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+platforms:
+  - name: ansible-newrelic-php-ubuntu-18.04
+    image: fittest/ubuntu-18.04:latest
+    pre_build_image: true
+    command: /sbin/init
+    privileged: true
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    docker_ssl_version: SSLv23
+  - name: ansible-newrelic-php-ubuntu-20.04
+    image: fittest/ubuntu-20.04:latest
+    pre_build_image: true
+    command: /sbin/init
+    privileged: true
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    docker_ssl_version: SSLv23
+provisioner:
+  name: ansible
+  options:
+    D: True
+scenario:
+  name: default
+verifier:
+  name: goss
+  enabled: True
+lint: |
+  set -e
+  yamllint .
+  ansible-lint -R .
